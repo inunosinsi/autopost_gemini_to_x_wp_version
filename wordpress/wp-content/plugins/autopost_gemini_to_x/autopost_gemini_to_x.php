@@ -35,3 +35,39 @@ function autopost_gemini_to_x_meta_box_callback( $post ) {
     <?php
     /**<input type="text" id="my_custom_field_id" name="my_custom_field_name" value="<?php echo esc_attr( $my_custom_field ); ?>" style="width:100%;" />**/
 }
+
+/**
+ * 投稿保存時にカスタムフィールドのデータを保存
+ * @param int $post_id 現在の投稿ID
+ */
+function autopost_gemini_to_x_save_postdata( $post_id ) {
+    // Nonceが設定されていない、または不正な場合は処理を中止
+    if ( ! isset( $_POST['my_post_enhancer_nonce'] ) || ! wp_verify_nonce( $_POST['my_post_enhancer_nonce'], basename( __FILE__ ) ) ) {
+        return $post_id;
+    }
+
+    // 自動保存またはリビジョンの場合は処理を中止
+    if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) {
+        return $post_id;
+    }
+
+    // ユーザー権限の確認
+    if ( ! current_user_can( 'edit_post', $post_id ) ) {
+        return $post_id;
+    }
+
+    // 入力値の取得とサニタイズ
+    $new_value = ( isset( $_POST['my_custom_field_name'] ) ) ? sanitize_text_field( $_POST['my_custom_field_name'] ) : '';
+
+    // 古い値を取得
+    $old_value = get_post_meta( $post_id, '_my_custom_field_key', true );
+
+    // 値が変更された場合のみ更新
+    if ( $new_value && $new_value !== $old_value ) {
+        update_post_meta( $post_id, '_my_custom_field_key', $new_value );
+    } elseif ( empty( $new_value ) && $old_value ) {
+        // 値が空になった場合は削除
+        delete_post_meta( $post_id, '_my_custom_field_key' );
+    }
+}
+add_action( 'save_post', 'autopost_gemini_to_x_save_postdata' );
