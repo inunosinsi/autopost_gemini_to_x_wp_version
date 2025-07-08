@@ -58,7 +58,7 @@ function autopost_gemini_to_x_settings_init() {
         'autopost_gemini_to_x_prompt',         // データベースに保存する設定キー (テキストフィールド用)
         array(
             'type' => 'string',
-            'sanitize_callback' => 'sanitize_text_field', // 入力値をサニタイズするコールバック関数
+            'sanitize_callback' => 'sanitize_textarea_field', // 入力値をサニタイズするコールバック関数
             'default' => '',
         )
     );
@@ -106,7 +106,7 @@ add_action( 'admin_init', 'autopost_gemini_to_x_settings_init' );
 
 // 設定セクションの説明を表示するコールバック関数
 function autopost_gemini_to_x_main_section_callback() {
-    echo '<p>記事紹介プラグイン By Geminiの設定を行います。</p>';
+    echo '<p>Gemini APIキーは<a href="https://ai.google.dev/gemini-api/docs" target="_blank" rel="noopener">Google AI Gemini API |Google AI Studio |Google for Developers  |  Google AI for Developers</a>で生成してください。</p>';
 }
 
 // テキスト入力フィールドのHTMLを表示するコールバック関数
