@@ -35,9 +35,9 @@ function autopost_gemini_to_x_meta_box_callback( $post ) {
  */
 function autopost_gemini_to_x_save_postdata( $post_id ) {
     // Nonceが設定されていない、または不正な場合は処理を中止
-    if ( ! isset( $_POST['my_post_enhancer_nonce'] ) || ! wp_verify_nonce( $_POST['my_post_enhancer_nonce'], basename( __FILE__ ) ) ) {
-        return $post_id;
-    }
+    /**if ( ! isset( $_POST['my_post_enhancer_nonce'] ) || ! wp_verify_nonce( $_POST['my_post_enhancer_nonce'], basename( __FILE__ ) ) ) {
+        // return $post_id;
+    }**/
 
     // 自動保存またはリビジョンの場合は処理を中止
     if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) {
@@ -50,17 +50,17 @@ function autopost_gemini_to_x_save_postdata( $post_id ) {
     }
 
     // 入力値の取得とサニタイズ
-    $new_value = ( isset( $_POST['my_custom_field_name'] ) ) ? sanitize_text_field( $_POST['my_custom_field_name'] ) : '';
+	$gen = "自動生成された値";
 
     // 古い値を取得
-    $old_value = get_post_meta( $post_id, '_my_custom_field_key', true );
+    $old = get_post_meta( $post_id, '_autopost_gemini_to_x_key', true );
 
     // 値が変更された場合のみ更新
-    if ( $new_value && $new_value !== $old_value ) {
-        update_post_meta( $post_id, '_my_custom_field_key', $new_value );
-    } elseif ( empty( $new_value ) && $old_value ) {
+    if ( $gen && $gen !== $old ) {
+        update_post_meta( $post_id, '_autopost_gemini_to_x_key', $gen );
+    } elseif ( empty( $gen ) && $old ) {
         // 値が空になった場合は削除
-        delete_post_meta( $post_id, '_my_custom_field_key' );
+        delete_post_meta( $post_id, '_autopost_gemini_to_x_key' );
     }
 }
 add_action( 'save_post', 'autopost_gemini_to_x_save_postdata' );
