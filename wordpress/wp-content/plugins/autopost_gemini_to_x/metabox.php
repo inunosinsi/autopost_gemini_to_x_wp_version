@@ -16,24 +16,18 @@ add_action( 'add_meta_boxes', 'autopost_gemini_to_x_add_meta_box' );
  * @param WP_Post $post 現在の投稿オブジェクト
  */
 function autopost_gemini_to_x_meta_box_callback( $post ) {
-    // セキュリティ対策: Nonceフィールドを追加
-    //wp_nonce_field( basename( __FILE__ ), 'my_post_enhancer_nonce' );
+	// セキュリティ対策: Nonceフィールドを追加
+	//wp_nonce_field( basename( __FILE__ ), 'my_post_enhancer_nonce' );
 
-    // 保存されているカスタムフィールドの値を取得
-    //$my_custom_field = get_post_meta( $post->ID, '_my_custom_field_key', true );
-    ?>
-    <p>
-        <label for="autopost_gemini_to_x_id">Geminiによる記事の紹介文を出力したい:</label><br>
-    </p>
-    <?php
-    /**<input type="text" id="my_custom_field_id" name="my_custom_field_name" value="<?php echo esc_attr( $my_custom_field ); ?>" style="width:100%;" />**/
+	$gen = get_post_meta( $post->ID, '_autopost_gemini_to_x_key', true );
+	echo $gen;
 }
 
 /**
  * 投稿保存時にカスタムフィールドのデータを保存
  * @param int $post_id 現在の投稿ID
  */
-function autopost_gemini_to_x_save_postdata( $post_id ) {
+function autopost_gemini_to_x_save_postdata( $post_id, $post, $update ) {
     // Nonceが設定されていない、または不正な場合は処理を中止
     /**if ( ! isset( $_POST['my_post_enhancer_nonce'] ) || ! wp_verify_nonce( $_POST['my_post_enhancer_nonce'], basename( __FILE__ ) ) ) {
         // return $post_id;
@@ -51,17 +45,17 @@ function autopost_gemini_to_x_save_postdata( $post_id ) {
 
     // 入力値の取得とサニタイズ
     include_once(__DIR__."/generate.php");
-	$gen = generate("", "");
+	$gen = generate($post);
 
     // 古い値を取得
     $old = get_post_meta( $post_id, '_autopost_gemini_to_x_key', true );
 
     // 値が変更された場合のみ更新
-    if ( $gen && $gen !== $old ) {
-        update_post_meta( $post_id, '_autopost_gemini_to_x_key', $gen );
-    } elseif ( empty( $gen ) && $old ) {
-        // 値が空になった場合は削除
-        delete_post_meta( $post_id, '_autopost_gemini_to_x_key' );
-    }
+	if ( $gen && $gen !== $old ) {
+		update_post_meta( $post_id, '_autopost_gemini_to_x_key', $gen );
+	} elseif ( empty( $gen ) && $old ) {
+		// 値が空になった場合は削除
+		delete_post_meta( $post_id, '_autopost_gemini_to_x_key' );
+	}
 }
-add_action( 'save_post', 'autopost_gemini_to_x_save_postdata' );
+add_action( 'save_post', 'autopost_gemini_to_x_save_postdata', 10, 3 );
