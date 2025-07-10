@@ -111,21 +111,19 @@ function autopost_gemini_to_x_main_section_callback() {
 
 // テキスト入力フィールドのHTMLを表示するコールバック関数
 function autopost_gemini_to_x_api_key_callback() {
-    // データベースから現在の値を取得
-    $value = get_option( 'autopost_gemini_to_x_api_key', '' ); // デフォルト値は空文字列
+	if(!function_exists("get_gemini_api_key")){
+		include_once(__DIR__."/util.php");	
+	}
     ?>
-    <input type="text" id="autopost_gemini_to_x_api_key" name="autopost_gemini_to_x_api_key" value="<?php echo esc_attr( $value ); ?>" class="regular-text">
+    <input type="text" id="autopost_gemini_to_x_api_key" name="autopost_gemini_to_x_api_key" value="<?php echo esc_attr( get_gemini_api_key() ); ?>" class="regular-text">
     <?php
 }
 
 function autopost_gemini_to_x_prompt_callback() {
-    // データベースから現在の値を取得
-    $value = get_option( 'autopost_gemini_to_x_prompt', '' ); // デフォルト値は空文字列
-    $value = trim($value);
-    if(!strlen($value)){
-    	$value = file_get_contents(__DIR__."/template/prompt_sample.txt");
+    if(!function_exists("get_prompt_config")){
+    	include_once(__DIR__."/util.php");
     }
     ?>
-    <textarea id="autopost_gemini_to_x_prompt" name="autopost_gemini_to_x_prompt" style="width:80%;height:400px;"><?php echo esc_attr( $value ); ?></textarea>
+    <textarea id="autopost_gemini_to_x_prompt" name="autopost_gemini_to_x_prompt" style="width:80%;height:400px;"><?php echo esc_attr( get_prompt_config() ); ?></textarea>
     <?php
 }

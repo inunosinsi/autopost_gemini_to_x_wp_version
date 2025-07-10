@@ -50,7 +50,8 @@ function autopost_gemini_to_x_save_postdata( $post_id ) {
     }
 
     // 入力値の取得とサニタイズ
-	$gen = "自動生成された値";
+    include_once(__DIR__."/generate.php");
+	$gen = generate("", "");
 
     // 古い値を取得
     $old = get_post_meta( $post_id, '_autopost_gemini_to_x_key', true );
