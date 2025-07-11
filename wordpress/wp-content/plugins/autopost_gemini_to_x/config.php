@@ -39,29 +39,38 @@ function autopost_gemini_to_x_page_html() {
 
 // プラグインの設定を登録する関数
 function autopost_gemini_to_x_settings_init() {
-    // -------------------------------------------------------------------
-    // 1. 設定グループを登録
-    // このグループに属する設定は一括で保存・検証される
-    // -------------------------------------------------------------------
-    register_setting(
-        'autopost_gemini_to_x_settings_group',     // 設定グループ名
-        'autopost_gemini_to_x_api_key',         // データベースに保存する設定キー (テキストフィールド用)
-        array(
-            'type' => 'string',
-            'sanitize_callback' => 'sanitize_text_field', // 入力値をサニタイズするコールバック関数
-            'default' => '',
-        )
-    );
+	// -------------------------------------------------------------------
+	// 1. 設定グループを登録
+	// このグループに属する設定は一括で保存・検証される
+	// -------------------------------------------------------------------
+	$types = array(
+		"api_key" => "Gemini API Key",
+		"consumer_key" => "X consumer key",
+		"consumer_secret" => "X consumer secret",
+		"access_token" => "X access token",
+		"access_token_secret" => "X access token secret"
+	);
+	foreach($types as $idx => $label){
+		register_setting(
+			'autopost_gemini_to_x_settings_group',
+			'autopost_gemini_to_x_'.$idx,
+			array(
+			'type' => 'string',
+				'sanitize_callback' => 'sanitize_text_field',
+				'default' => '',
+			)
+		);
+	}
 
-    register_setting(
-        'autopost_gemini_to_x_settings_group',     // 設定グループ名
-        'autopost_gemini_to_x_prompt',         // データベースに保存する設定キー (テキストフィールド用)
-        array(
-            'type' => 'string',
-            'sanitize_callback' => 'sanitize_textarea_field', // 入力値をサニタイズするコールバック関数
-            'default' => '',
-        )
-    );
+	register_setting(
+		'autopost_gemini_to_x_settings_group',     // 設定グループ名
+		'autopost_gemini_to_x_prompt',         // データベースに保存する設定キー (テキストフィールド用)
+		array(
+			'type' => 'string',
+			'sanitize_callback' => 'sanitize_textarea_field', // 入力値をサニタイズするコールバック関数
+			'default' => '',
+		)
+	);
 
     // -------------------------------------------------------------------
     // 2. 設定セクションを登録
@@ -78,17 +87,19 @@ function autopost_gemini_to_x_settings_init() {
     // 3. 設定フィールドを登録
     // 各入力フィールドを特定のセクションに関連付ける
     // -------------------------------------------------------------------
-    add_settings_field(
-        'autopost_gemini_to_x_api_key',          // フィールドのID (HTMLのID属性にもなる)
-        'Gemini API Key',                  // フィールドのラベル
-        'autopost_gemini_to_x_api_key_callback', // フィールドのHTMLを表示する関数
-        'autopost_gemini_to_x-settings',            // 設定ページのユニークなスラッグ
-        'autopost_gemini_to_x_main_section',        // このフィールドが属するセクションのID
-        array(
-            'label_for' => 'autopost_gemini_to_x_api_key', // ラベルとinputの関連付け用
-            'class' => 'autopost_gemini_to_x-row',
-        )
-    );
+    foreach($types as $idx => $label){
+		add_settings_field(
+			'autopost_gemini_to_x_'.$idx,
+			$label,
+			'autopost_gemini_to_x_'.$idx.'_callback',
+			'autopost_gemini_to_x-settings',
+			'autopost_gemini_to_x_main_section',
+			array(
+	 			'label_for' => 'autopost_gemini_to_x_'.$idx,
+				'class' => 'autopost_gemini_to_x-row',
+			)
+		);
+	}
 
     add_settings_field(
         'autopost_gemini_to_x_prompt',          // フィールドのID (HTMLのID属性にもなる)
@@ -109,20 +120,43 @@ function autopost_gemini_to_x_main_section_callback() {
     echo '<p>Gemini APIキーは<a href="https://ai.google.dev/gemini-api/docs" target="_blank" rel="noopener">Google AI Gemini API |Google AI Studio |Google for Developers  |  Google AI for Developers</a>で生成してください。</p>';
 }
 
-// テキスト入力フィールドのHTMLを表示するコールバック関数
 function autopost_gemini_to_x_api_key_callback() {
-	if(!function_exists("get_gemini_api_key")){
-		include_once(__DIR__."/util.php");	
-	}
+	if(!function_exists("get_gemini_api_key")) include_once(__DIR__."/util.php");
     ?>
     <input type="text" id="autopost_gemini_to_x_api_key" name="autopost_gemini_to_x_api_key" value="<?php echo esc_attr( get_gemini_api_key() ); ?>" class="regular-text">
     <?php
 }
 
+function autopost_gemini_to_x_consumer_key_callback() {
+	if(!function_exists("get_x_consumer_key")) include_once(__DIR__."/util.php");	
+    ?>
+    <input type="text" id="autopost_gemini_to_x_consumer_key" name="autopost_gemini_to_x_consumer_key" value="<?php echo esc_attr( get_gemini_api_key() ); ?>" class="regular-text">
+    <?php
+}
+
+function autopost_gemini_to_x_consumer_secret_callback() {
+	if(!function_exists("get_x_consumer_secret")) include_once(__DIR__."/util.php");	
+    ?>
+    <input type="text" id="autopost_gemini_to_x_consumer_secret" name="autopost_gemini_to_x_consumer_secret" value="<?php echo esc_attr( get_gemini_api_key() ); ?>" class="regular-text">
+    <?php
+}
+
+function autopost_gemini_to_x_access_token_callback() {
+	if(!function_exists("get_x_access_token")) include_once(__DIR__."/util.php");	
+    ?>
+    <input type="text" id="autopost_gemini_to_x_access_token" name="autopost_gemini_to_x_access_token" value="<?php echo esc_attr( get_gemini_api_key() ); ?>" class="regular-text">
+    <?php
+}
+
+function autopost_gemini_to_x_access_token_secret_callback() {
+	if(!function_exists("get_x_access_token_secret")) include_once(__DIR__."/util.php");	
+    ?>
+    <input type="text" id="autopost_gemini_to_x_access_token_secret" name="autopost_gemini_to_x_access_token_secret" value="<?php echo esc_attr( get_gemini_api_key() ); ?>" class="regular-text">
+    <?php
+}
+
 function autopost_gemini_to_x_prompt_callback() {
-    if(!function_exists("get_prompt_config")){
-    	include_once(__DIR__."/util.php");
-    }
+    if(!function_exists("get_prompt_config")) include_once(__DIR__."/util.php");
     ?>
     <textarea id="autopost_gemini_to_x_prompt" name="autopost_gemini_to_x_prompt" style="width:80%;height:400px;"><?php echo esc_attr( get_prompt_config() ); ?></textarea>
     <?php
