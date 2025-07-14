@@ -49,7 +49,7 @@ function autopost_gemini_to_x_save_postdata( $post_id, $post, $update ) {
     }
 
 	if(get_post_status($post->ID) != "publish"){
-		return $post_id;    	
+		return $post_id;
     }
 
     if(!isset($_POST["autopost_gemini_to_x_generate"]) || (int)$_POST["autopost_gemini_to_x_generate"] !== 1){
@@ -63,11 +63,15 @@ function autopost_gemini_to_x_save_postdata( $post_id, $post, $update ) {
 	$gen = generate($post);
 
     // 古い値を取得
-    $old = get_post_meta( $post_id, '_autopost_gemini_to_x_key', true );
+    $old = get_post_meta( $post_id, '_autopost_gemini_to_x_key', "" );
 
     // 値が変更された場合のみ更新
 	if ( $gen && $gen !== $old ) {
-		update_post_meta( $post_id, '_autopost_gemini_to_x_key', $gen );
+	    update_post_meta( $post_id, '_autopost_gemini_to_x_key', $gen );
+
+	    // $redirect_url = admin_url('post.php?post='.$post_id.'&action=edit');
+	    // wp_redirect($redirect_url);
+	    // exit;
 	} elseif ( empty( $gen ) && $old ) {
 		// 値が空になった場合は削除
 		delete_post_meta( $post_id, '_autopost_gemini_to_x_key' );
