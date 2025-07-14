@@ -22,4 +22,10 @@ if ( $gen && $gen !== $old ) {
 	delete_post_meta( $post_id, '_autopost_gemini_to_x_key' );
 }
 
-echo $gen."\n";
+if(!function_exists("post")){
+	include_once(__DIR__."/post.php");
+}
+
+$res = post($gen);
+var_dump($res["http_code"]);
+var_dump($res["error_message"]);

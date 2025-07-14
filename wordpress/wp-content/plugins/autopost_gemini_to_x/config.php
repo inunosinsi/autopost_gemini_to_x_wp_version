@@ -118,6 +118,7 @@ add_action( 'admin_init', 'autopost_gemini_to_x_settings_init' );
 // 設定セクションの説明を表示するコールバック関数
 function autopost_gemini_to_x_main_section_callback() {
     echo '<p>Gemini APIキーは<a href="https://ai.google.dev/gemini-api/docs" target="_blank" rel="noopener">Google AI Gemini API |Google AI Studio |Google for Developers  |  Google AI for Developers</a>で生成してください。</p>';
+    echo '<p>X APIのキーは<a href="https://developer.x.com/" target="_blank" rel="noopener">X Developers</a>で生成してください。</p>';
 }
 
 function autopost_gemini_to_x_api_key_callback() {
@@ -130,28 +131,28 @@ function autopost_gemini_to_x_api_key_callback() {
 function autopost_gemini_to_x_consumer_key_callback() {
 	if(!function_exists("get_x_consumer_key")) include_once(__DIR__."/util.php");	
     ?>
-    <input type="text" id="autopost_gemini_to_x_consumer_key" name="autopost_gemini_to_x_consumer_key" value="<?php echo esc_attr( get_gemini_api_key() ); ?>" class="regular-text">
+    <input type="text" id="autopost_gemini_to_x_consumer_key" name="autopost_gemini_to_x_consumer_key" value="<?php echo esc_attr( get_x_consumer_key() ); ?>" class="regular-text">
     <?php
 }
 
 function autopost_gemini_to_x_consumer_secret_callback() {
 	if(!function_exists("get_x_consumer_secret")) include_once(__DIR__."/util.php");	
     ?>
-    <input type="text" id="autopost_gemini_to_x_consumer_secret" name="autopost_gemini_to_x_consumer_secret" value="<?php echo esc_attr( get_gemini_api_key() ); ?>" class="regular-text">
+    <input type="text" id="autopost_gemini_to_x_consumer_secret" name="autopost_gemini_to_x_consumer_secret" value="<?php echo esc_attr( get_x_consumer_secret() ); ?>" class="regular-text">
     <?php
 }
 
 function autopost_gemini_to_x_access_token_callback() {
 	if(!function_exists("get_x_access_token")) include_once(__DIR__."/util.php");	
     ?>
-    <input type="text" id="autopost_gemini_to_x_access_token" name="autopost_gemini_to_x_access_token" value="<?php echo esc_attr( get_gemini_api_key() ); ?>" class="regular-text">
+    <input type="text" id="autopost_gemini_to_x_access_token" name="autopost_gemini_to_x_access_token" value="<?php echo esc_attr( get_x_access_token() ); ?>" class="regular-text">
     <?php
 }
 
 function autopost_gemini_to_x_access_token_secret_callback() {
 	if(!function_exists("get_x_access_token_secret")) include_once(__DIR__."/util.php");	
     ?>
-    <input type="text" id="autopost_gemini_to_x_access_token_secret" name="autopost_gemini_to_x_access_token_secret" value="<?php echo esc_attr( get_gemini_api_key() ); ?>" class="regular-text">
+    <input type="text" id="autopost_gemini_to_x_access_token_secret" name="autopost_gemini_to_x_access_token_secret" value="<?php echo esc_attr( get_x_access_token_secret() ); ?>" class="regular-text">
     <?php
 }
 

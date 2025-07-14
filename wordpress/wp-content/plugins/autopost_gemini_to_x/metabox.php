@@ -16,10 +16,15 @@ add_action( 'add_meta_boxes', 'autopost_gemini_to_x_add_meta_box' );
  * @param WP_Post $post 現在の投稿オブジェクト
  */
 function autopost_gemini_to_x_meta_box_callback( $post ) {
-	// セキュリティ対策: Nonceフィールドを追加
-	//wp_nonce_field( basename( __FILE__ ), 'my_post_enhancer_nonce' );
-
 	$gen = get_post_meta( $post->ID, '_autopost_gemini_to_x_key', true );
+	if(strlen($gen)){
+		$gen .= "<br>";
+		$gen .= "<input type=\"hidden\" name=\"autopost_gemini_to_x_generate\" value=\"0\">";
+		$gen .= "<label><input type=\"checkbox\" name=\"autopost_gemini_to_x_generate\" value=\"1\">紹介文を再生成する</label>\n";
+	}else{
+		$gen .= "<input type=\"hidden\" name=\"autopost_gemini_to_x_generate\" value=\"1\">";
+		
+	}
 	echo $gen;
 }
 
@@ -43,6 +48,16 @@ function autopost_gemini_to_x_save_postdata( $post_id, $post, $update ) {
         return $post_id;
     }
 
+	if(get_post_status($post->ID) != "publish"){
+		return $post_id;    	
+    }
+
+    if(!isset($_POST["autopost_gemini_to_x_generate"]) || (int)$_POST["autopost_gemini_to_x_generate"] !== 1){
+    	return $post_id;
+    }
+
+    
+
     // 入力値の取得とサニタイズ
     include_once(__DIR__."/generate.php");
 	$gen = generate($post);
@@ -57,5 +72,7 @@ function autopost_gemini_to_x_save_postdata( $post_id, $post, $update ) {
 		// 値が空になった場合は削除
 		delete_post_meta( $post_id, '_autopost_gemini_to_x_key' );
 	}
+
+	return $post_id;
 }
 add_action( 'save_post', 'autopost_gemini_to_x_save_postdata', 10, 3 );

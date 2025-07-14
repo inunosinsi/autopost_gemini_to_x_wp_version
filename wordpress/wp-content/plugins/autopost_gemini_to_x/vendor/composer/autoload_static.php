@@ -36,6 +36,14 @@ class ComposerStaticInit532eabe61b40540a5a2bdf76e53cdfa9
         array (
             'GeminiAPI\\' => 10,
         ),
+        'C' => 
+        array (
+            'Composer\\CaBundle\\' => 18,
+        ),
+        'A' => 
+        array (
+            'Abraham\\TwitterOAuth\\' => 21,
+        ),
     );
 
     public static $prefixDirsPsr4 = array (
@@ -79,6 +87,14 @@ class ComposerStaticInit532eabe61b40540a5a2bdf76e53cdfa9
         'GeminiAPI\\' => 
         array (
             0 => __DIR__ . '/..' . '/gemini-api-php/client/src',
+        ),
+        'Composer\\CaBundle\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/composer/ca-bundle/src',
+        ),
+        'Abraham\\TwitterOAuth\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/abraham/twitteroauth/src',
         ),
     );
 
