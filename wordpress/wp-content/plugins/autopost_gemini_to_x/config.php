@@ -119,6 +119,7 @@ add_action( 'admin_init', 'autopost_gemini_to_x_settings_init' );
 function autopost_gemini_to_x_main_section_callback() {
     echo '<p>Gemini APIキーは<a href="https://ai.google.dev/gemini-api/docs" target="_blank" rel="noopener">Google AI Gemini API |Google AI Studio |Google for Developers  |  Google AI for Developers</a>で生成してください。</p>';
     echo '<p>X APIのキーは<a href="https://developer.x.com/" target="_blank" rel="noopener">X Developers</a>で生成してください。</p>';
+    echo '<p>各APIキーの取得方法に関しては、<a href="https://saitodev.co/programming/download/obtaining_various_api_keys.pdf" target="_blank" rel="noopener">こちら</a>をご覧ください。</p>';
 }
 
 function autopost_gemini_to_x_api_key_callback() {
